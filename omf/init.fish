@@ -15,34 +15,19 @@ function add_to_fish_user_paths --description "Prepends to your PATH via fish_us
   end
 end
 
-### Heroku
-if test -d /usr/local/heroku/bin
-  add_to_fish_user_paths /usr/local/heroku/bin
-end
-
 ## YARN
 if test -d ~/.yarn/bin
-  set --universal --export fish_user_paths ~/.yarn/bin $fish_user_paths
+  add_to_fish_user_paths ~/.yarn/bin
 end
 
-### asdf
-if test -d ~/.asdf
-  source ~/.asdf/asdf.fish
+# asdf
+if test -d /usr/local/opt/asdf/asdf
+  source /usr/local/opt/asdf/asdf.fish
 end
 
-### Elixir
-if test -d ~/Development/elixir-lang/elixir/bin
-  add_to_fish_user_paths ~/Development/elixir-lang/elixir/bin
-end
-
-### Racket
-if test -d "/Applications/Racket v6.10.1/bin"
-  add_to_fish_user_paths "/Applications/Racket v6.10.1/bin"
-end
-
-### Postgres.app
-if test -d /Applications/Postgres.app/Contents/Versions/latest/bin
-  add_to_fish_user_paths /Applications/Postgres.app/Contents/Versions/latest/bin
+# ssl
+if test -d /usr/local/opt/openssl/bin
+  add_to_fish_user_paths /usr/local/opt/openssl/bin
 end
 
 ### rbenv
@@ -50,61 +35,61 @@ if test -d ~/.rbenv/bin
   add_to_fish_user_paths ~/.rbenv/bin
 end
 
-if test -d /opt/local/share/man
-  set MANPATH /opt/local/share/man $MANPATH
-end
-
 # Virtualfish
-python -m virtualfish | source
-
-## interactive_setup
-function interactive_setup
-  . (pyenv init -|psub);
-  . (pyenv virtualenv-init -|psub);
-  . (rbenv init -|psub);
-end
+#python -m virtualfish | source
 
 # Load rbenv and virtualenv automatically
-status --is-interactive; and interactive_setup
+status --is-interactive; and pyenv init - | source
+status --is-interactive; and pyenv virtualenv-init - | source
+#status --is-interactive; and rbenv init - | source
 
-## Git
-function gfo
-  git fetch origin
+# Fzf + fd + bat
+set -gx FD_OPTIONS "--follow --exclude .git --exclude node_modules"
+set -gx FZF_DEFAULT_OPTS "
+  --no-mouse
+  --height 50% -1
+  --reverse
+  --multi
+  --inline-info
+  --preview='bat --style=numbers --color=always {} 2> /dev/null | head -500'
+  --preview-window='right:wrap:hidden'
+  --bind='ctrl-t:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+# Use git-ls-files inside git repo, otherwise fd
+set -gx FZF_DEFAULT_COMMAND "git ls-files --cached --others --exclude-standard | fd --type f --type l $FD_OPTIONS"
+set -gx FZF_CTRL_T_COMMAND "fd $FD_OPTIONS"
+set -gx FZF_ALT_C_COMMAND "fd --type d $FD_OPTIONS"
+set -gx BAT_PAGER "less -R"
+
+# Aliases
+function ga --wrap="git add" --description "alias ga=git add"
+  git add $argv
 end
 
-function gpom
-  git push origin master
+function gb --wrap="git branch" --description "alias gb=git branch"
+  git branch $argv
 end
 
-function gcm
-  git checkout master
+function gc --wrap="git commit" --description "alias gc=git commit"
+  git commit $argv
 end
 
-function gmom
-  git merge origin master
+function gd --wrap="git diff" --description "alias gd=git diff"
+  git diff $argv
 end
 
-function gs
-  git status
+function go --wrap="git checkout" --description "alias go=git checkout"
+  git checkout $argv
 end
 
-function ga
-  git add .
+function grm --wrap="git rm" --description "alias grm=git rm"
+  git rm $argv
 end
 
-function gc
-  git commit -v
+function gs --wrap="git status" --description "alias gs=git status"
+  git status $argv
 end
 
-function gd
-  git diff
-end
-
-function jekyll
-  bundle exec jekyll serve --drafts --config _config.yml,_config_dev.yml
-end
-
-function vim
+function vim --wrap="nvim" --description "alias vim=nvim"
   nvim $argv
 end
 
