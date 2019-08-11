@@ -1,6 +1,3 @@
-package virtualfish
+package z
 theme agnoster
-theme budspencer
 theme default
-theme lambda
-theme taktoa
