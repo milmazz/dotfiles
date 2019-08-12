@@ -1,8 +1,11 @@
 ## Disable welcome text
 set --erase fish_greeting
 
+## Erlang history
+set -g -x ERL_AFLAGS "-kernel shell_history enabled"
+
 if not set --query EDITOR
-  set --universal --export EDITOR vim
+  set --universal --export EDITOR nvim
 end
 
 ## Paths
@@ -13,6 +16,15 @@ function add_to_fish_user_paths --description "Prepends to your PATH via fish_us
       set --universal --export fish_user_paths $path $fish_user_paths
     end
   end
+end
+
+function removepath
+    if set -l index (contains -i $argv[1] $PATH)
+        set --erase --universal fish_user_paths[$index]
+        echo "Updated PATH: $PATH"
+    else
+        echo "$argv[1] not found in PATH: $PATH"
+    end
 end
 
 ## YARN
