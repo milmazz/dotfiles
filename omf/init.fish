@@ -70,7 +70,7 @@ set -gx FZF_DEFAULT_OPTS "
 set -gx FZF_DEFAULT_COMMAND "git ls-files --cached --others --exclude-standard | fd --type f --type l $FD_OPTIONS"
 set -gx FZF_CTRL_T_COMMAND "fd $FD_OPTIONS"
 set -gx FZF_ALT_C_COMMAND "fd --type d $FD_OPTIONS"
-set -gx BAT_PAGER "less -R"
+set -gx BAT_PAGER "less -RF"
 
 # Aliases
 function ga --wrap="git add" --description "alias ga=git add"

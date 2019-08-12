@@ -3,3 +3,9 @@
 
 # Use "gitignore" highlighting for ".ignore" files
 --map-syntax .ignore:.gitignore
+
+# Show line numbers, Git modifications and file header (but no grid)
+--style="numbers,changes,header"
+
+# Use italic text on the terminal (not supported on all terminals)
+--italic-text=always
