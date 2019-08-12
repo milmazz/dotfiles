@@ -91,6 +91,8 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'dense-analysis/ale'
   " Testing
   Plug 'janko/vim-test'
+  " TOC for GFM
+  Plug 'mzlogin/vim-markdown-toc'
 call plug#end()
 
 " Deoplete {{{
