@@ -53,8 +53,9 @@ call plug#begin('~/.local/share/nvim/plugged')
   " Polyglot loads language support on demand!
   Plug 'sheerun/vim-polyglot'
   " Color theme
-  Plug 'tomasr/molokai'
-  Plug 'fmoralesc/molokayo'
+  "Plug 'tomasr/molokai'
+  "Plug 'fmoralesc/molokayo'
+  Plug 'iCyMind/NeoSolarized'
   " add ANSI escape sequences
   " Plug 'powerman/vim-plugin-AnsiEsc'
   " Better statusbar
@@ -74,6 +75,8 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'elixir-editors/vim-elixir'
   " wisely "end" in Elixir and other languages
   Plug 'tpope/vim-endwise'
+  " Add a bunch of bracket mappings
+  Plug 'tpope/vim-unimpaired'
   " NOTE: Go to definition does not work now
   "Plug 'slashmili/alchemist.vim'
   " Git integration
@@ -223,12 +226,12 @@ let g:fzf_action = {
 " "
 " " You should not turn this setting on if you wish to use ALE as a completion
 " " source for other completion plugins, like Deoplete.
-let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 0
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_linters_explicit = 1
 " fix files when you save them.
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 0
 " Do not run ALE on:
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_text_changed = 'never'
@@ -262,9 +265,35 @@ nmap <silent> t<C-g> :TestVisit<CR>
 " }}}
 
 set background=dark
+set termguicolors
+
+" NeoSolarized {{{
+colorscheme NeoSolarized
+" default value is "normal", Setting this option to "high" or "low" does use the
+" same Solarized palette but simply shifts some values up or down in order to
+" expand or compress the tonal range displayed.
+let g:neosolarized_contrast = "high"
+
+" Special characters such as trailing whitespace, tabs, newlines, when displayed
+" using ":set list" can be set to one of three levels depending on your needs.
+" Default value is "normal". Provide "high" and "low" options.
+let g:neosolarized_visibility = "normal"
+
+" I make vertSplitBar a transparent background color. If you like the origin solarized vertSplitBar
+" style more, set this value to 0.
+let g:neosolarized_vertSplitBgTrans = 1
+
+" If you wish to enable/disable NeoSolarized from displaying bold, underlined or italicized
+" typefaces, simply assign 1 or 0 to the appropriate variable. Default values:
+let g:neosolarized_bold = 1
+let g:neosolarized_underline = 1
+let g:neosolarized_italic = 0
+" }}}
+
 " Activate Syntax Highlight
 syntax enable
-colorscheme molokai
+"colorscheme molokai
+"color dracula
 
 " Highlight characters that overstep the 120 character limit
 set colorcolumn=120
@@ -289,3 +318,24 @@ map <Left>  :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up>    :echo "no!"<cr>
 map <Down>  :echo "no!"<cr>
+
+" highlight _bad words_
+if exists("g:loaded_badWords")
+  finish
+endif
+let g:loaded_badWords = 1
+
+highlight badWords cterm=bold ctermbg=Red ctermfg=White
+
+fun! HighlightBadWords()
+  let en=[ 'obvious', 'obviously', 'basic', 'basically', 'simply', 'of course', 'just', 'everyone knows', 'easy', 'easily', 'trivial', 'trivially' ]
+  let es=[ 'evidentemente', 'simplemente', 'claramente', 'trivial', 'trivialmente' ]
+
+  for lang in [ en, es ]
+    let matcher='\c\<\(' . join(lang, '\|') . '\)\>'
+    call matchadd('badWords', matcher)
+  endfor
+endfun
+
+autocmd BufRead,BufNewFile *.md,*.txt,*.rst call HighlightBadWords()
+autocmd InsertLeave *.md,*.txt,*.rst call HighlightBadWords()

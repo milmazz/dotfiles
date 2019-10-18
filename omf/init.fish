@@ -33,7 +33,7 @@ if test -d ~/.yarn/bin
 end
 
 # asdf
-if test -d /usr/local/opt/asdf/asdf
+if test -d /usr/local/opt/asdf
   source /usr/local/opt/asdf/asdf.fish
 end
 
@@ -65,7 +65,7 @@ set -gx FZF_DEFAULT_OPTS "
   --inline-info
   --preview='bat --style=numbers --color=always {} 2> /dev/null | head -500'
   --preview-window='right:wrap:hidden'
-  --bind='ctrl-t:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+  --bind='ctrl-s:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 # Use git-ls-files inside git repo, otherwise fd
 set -gx FZF_DEFAULT_COMMAND "git ls-files --cached --others --exclude-standard | fd --type f --type l $FD_OPTIONS"
 set -gx FZF_CTRL_T_COMMAND "fd $FD_OPTIONS"
