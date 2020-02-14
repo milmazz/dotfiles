@@ -76,9 +76,7 @@ end
 
 add_to_fish_user_paths /usr/local/sbin
 
-#python -m virtualfish | source
-
-# Load rbenv and virtualenv automatically
+# Load virtualenv automatically
 status --is-interactive; and pyenv init - | source
 status --is-interactive; and pyenv virtualenv-init - | source
 
