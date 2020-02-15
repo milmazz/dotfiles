@@ -53,32 +53,22 @@ call plug#begin('~/.local/share/nvim/plugged')
   " Polyglot loads language support on demand!
   Plug 'sheerun/vim-polyglot'
   " Color theme
-  "Plug 'tomasr/molokai'
-  "Plug 'fmoralesc/molokayo'
   Plug 'iCyMind/NeoSolarized'
   " add ANSI escape sequences
-  " Plug 'powerman/vim-plugin-AnsiEsc'
+  Plug 'powerman/vim-plugin-AnsiEsc'
   " Better statusbar
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  " Tree navigation
-  " NOTE: I think I'll not need this plugin anymore, project navigation with fzf is
-  " way faster.
-  "Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-  " Intellisense engine, full language protocol server support
-  " NOTE: I will try using ALE + Elixir Language Server instead
-  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " FZF
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
   " Elixir configuration
+  Plug 'slashmili/alchemist.vim'
   Plug 'elixir-editors/vim-elixir'
   " wisely "end" in Elixir and other languages
   Plug 'tpope/vim-endwise'
   " Add a bunch of bracket mappings
   Plug 'tpope/vim-unimpaired'
-  " NOTE: Go to definition does not work now
-  "Plug 'slashmili/alchemist.vim'
   " Git integration
   Plug 'tpope/vim-fugitive'
   " GitHub integration
@@ -87,15 +77,14 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
   " Execute code checks, find mistakes, in the background
-  " NOTE: This works really well with credo, I'll try ALE + Elixir Language
-  " Server for now.
-  "Plug 'neomake/neomake'
   Plug 'ludovicchabant/vim-gutentags'
   Plug 'dense-analysis/ale'
   " Testing
   Plug 'janko/vim-test'
   " TOC for GFM
   Plug 'mzlogin/vim-markdown-toc'
+  " Vim plugin for interacting with databases
+  Plug 'tpope/vim-dadbod'
 call plug#end()
 
 " Deoplete {{{
@@ -147,38 +136,6 @@ nnoremap <silent> <leader>gQ :Gwq!<CR>
 "nnoremap <silent> <leader>g` :call ReviewLastCommit()<CR>
 " }}}
 
-" Linting {{{
-"augroup localneomake
-"  autocmd! BufWritePost * Neomake
-"augroup END
-"" Don't warn me to use smartquotes in Markdown ok?
-"let g:neomake_markdown_enabled_makers = []
-"" Configure a nice credo setup, courtesy https://github.com/neomake/neomake/pull/300
-"let g:neomake_elixir_enabled_makers = ['mix', 'mycredo']
-"function NeomakeCredoErrorType(entry)
-"  if a:entry.type ==# 'F'     " Refactoring opportunities
-"    let type = 'W'
-"  elseif a:entry.type ==# 'D' " Software design suggestions
-"    let type = 'I'
-"  elseif a:entry.type ==# 'W' " Warnings
-"    let type = 'W'
-"  elseif a:entry.type ==# 'R' " Readability suggestions
-"    let type = 'I'
-"  elseif a:entry.type ==# 'C' " Convention violation
-"    let type = 'W'
-"  else
-"    let type = 'M'            " Everything else is a message
-"  endif
-"  let a:entry.type = type
-"endfunction
-"let g:neomake_elixir_mycredo_maker = {
-"      \ 'exe': 'mix',
-"      \ 'args': ['credo', 'list', '%:p', '--format=oneline'],
-"      \ 'errorformat': '[%t] %. %f:%l:%c %m,[%t] %. %f:%l %m',
-"      \ 'postprocess': function('NeomakeCredoErrorType')
-"      \ }
-" }}}
-
 " Snippets {{{
 let g:UltiSnipsExpandTrigger = '<tab>'
 let g:UltiSnipsJumpForwardTrigger = '<c-b>'
@@ -186,16 +143,18 @@ let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
 " }}}
 
 " Elixir {{{
+" Disable jump to definition, let's stick with ALE for now
+let g:alchemist_tag_disable = 1
 " Jump to the definition
-"let g:alchemist_tag_map = '<C-]>'
+let g:alchemist_tag_map = '<C-]>'
 " Jump through tag stack
-"let g:alchemist_tag_stack_map = '<C-T>'
+let g:alchemist_tag_stack_map = '<C-T>'
 " Source path for Elixir and Erlang
-"let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
+let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
 " Set IEx terminal size
-"let g:alchemist_iex_term_size = 15
+let g:alchemist_iex_term_size = 15
 " Set IEx window split
-"let g:alchemist_iex_term_split = 'split'
+let g:alchemist_iex_term_split = 'split'
 " }}}
 
 " Status Bar {{{
@@ -230,8 +189,9 @@ let g:ale_completion_enabled = 0
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_linters_explicit = 1
+let g:ale_set_ballons = 1
 " fix files when you save them.
-let g:ale_fix_on_save = 0
+let g:ale_fix_on_save = 1
 " Do not run ALE on:
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_text_changed = 'never'
@@ -299,18 +259,6 @@ set colorcolumn=120
 
 " Show the linebreak if wrapping is enabled
 set showbreak=↪
-
-" NOTE: This is also covered with ALE plugin.
-" Delete trailing white space on save
-"func! DeleteTrailingWS()
-"  exe "normal mz"
-"  %s/\s\+$//ge
-"  exe "normal `z"
-"endfunc
-"autocmd BufWrite * silent call DeleteTrailingWS()
-
-" Format Elixir files on save
-"autocmd BufWritePost *.exs,*.ex silent :!mix format %
 
 " NO ARROW KEYS COME ON
 map <Left>  :echo "no!"<cr>
