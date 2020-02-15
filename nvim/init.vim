@@ -1,3 +1,5 @@
+set nocompatible
+
 " turn off mouse
 set mouse=""
 
@@ -13,23 +15,17 @@ set expandtab
 " - Indent by 2 spaces by default
 set shiftwidth=2
 
-" set default encoding to UTF-8
-set encoding=utf-8
-
 " Use comma for leader
 let g:mapleader=','
 
 set number " line numbering
 
-" Highlight search results
-set hlsearch
-" Incremental search, search as you type
-set incsearch
 " Ignore case when searching
 set ignorecase smartcase
 " Ignore case when searching lowercase
 set smartcase
 " Stop highlighting on Enter
+" NOTE: vim-sensible allows to do the same with <C-L>
 map <CR> :nohlsearch<cr>
 
 " Highlight cursor position
@@ -48,6 +44,7 @@ endif
 " }}}
 
 call plug#begin('~/.local/share/nvim/plugged')
+  Plug 'tpope/vim-sensible'
   " asynchronous completation framework
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   " Polyglot loads language support on demand!
@@ -248,11 +245,6 @@ let g:neosolarized_bold = 1
 let g:neosolarized_underline = 1
 let g:neosolarized_italic = 0
 " }}}
-
-" Activate Syntax Highlight
-syntax enable
-"colorscheme molokai
-"color dracula
 
 " Highlight characters that overstep the 120 character limit
 set colorcolumn=120
