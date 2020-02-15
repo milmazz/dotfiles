@@ -257,12 +257,10 @@ nnoremap <leader>, :ALEFix<CR>
 " Testing {{{
 let test#strategy = 'neovim'
 let test#neovim#term_position = 'topleft'
-" these "Ctrl mappings" work well when Caps Lock is mapped to Ctrl
-nmap <silent> t<C-n> :TestNearest<CR>
-nmap <silent> t<C-f> :TestFile<CR>
-nmap <silent> t<C-s> :TestSuite<CR>
-nmap <silent> t<C-l> :TestLast<CR>
-nmap <silent> t<C-g> :TestVisit<CR>
+nmap <silent> <leader>tt :TestNearest<CR> "Test This
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR> "Test All
+nmap <silent> <leader>tl :TestLast<CR>
 " }}}
 
 set background=dark
