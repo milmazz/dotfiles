@@ -1,7 +1,14 @@
 {
   "codeLens.enable": true,
   "diagnostic-languageserver.filetypes": {
+    "vim": "vint",
+    "markdown": ["write-good", "markdownlint"],
+    "sh": "shellcheck",
     "elixir": ["mix_credo", "mix_credo_compile"],
     "eelixir": ["mix_credo", "mix_credo_compile"]
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "elixir": "mix_format",
+    "eelixir": "mix_format"
   }
 }
