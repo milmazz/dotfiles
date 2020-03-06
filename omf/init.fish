@@ -78,7 +78,7 @@ add_to_fish_user_paths /usr/local/sbin
 
 # Load virtualenv automatically
 status --is-interactive; and pyenv init - | source
-status --is-interactive; and pyenv virtualenv-init - | source
+eval (python -m virtualfish)
 
 ###########
 # Aliases #
