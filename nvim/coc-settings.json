@@ -1,0 +1,7 @@
+{
+  "codeLens.enable": true,
+  "diagnostic-languageserver.filetypes": {
+    "elixir": ["mix_credo", "mix_credo_compile"],
+    "eelixir": ["mix_credo", "mix_credo_compile"]
+  }
+}
