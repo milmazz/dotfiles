@@ -76,6 +76,11 @@ end
 
 add_to_fish_user_paths /usr/local/sbin
 
+# rust
+if test -e ~/.cargo/env
+  add_to_fish_user_paths ~/.cargo/bin
+end
+
 # Load virtualenv automatically
 status --is-interactive; and pyenv init - | source
 eval (python -m virtualfish)
@@ -125,3 +130,5 @@ end
 function vim --wrap="nvim" --description "alias vim=nvim"
   nvim $argv
 end
+
+# starship init fish | source

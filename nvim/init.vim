@@ -46,7 +46,7 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
   Plug 'tpope/vim-sensible'
   " asynchronous completation framework
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   " Polyglot loads language support on demand!
   Plug 'sheerun/vim-polyglot'
   " Color theme
@@ -185,11 +185,11 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
-"if has('patch8.1.1068')
-  " Use `complete_info` if your (Neo)Vim version supports it.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+"if exists('*complete_info')
 "  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 "else
-"  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 "endif
 
 " Use `[g` and `]g` to navigate diagnostics
@@ -289,14 +289,14 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " }}}
 
 " Deoplete {{{
-let g:deoplete#enable_at_startup = 1
-if !exists('g:deoplete#omni#input_patterns')
-  let g:deoplete#omni#input_patterns = {}
-endif
-" Use ALE as completion sources for all code.
-call deoplete#custom#option('sources', {
-\ '_': ['ale'],
-\})
+"let g:deoplete#enable_at_startup = 1
+"if !exists('g:deoplete#custom#var')
+"  let g:deoplete#custom#var = {}
+"endif
+"" Use ALE as completion sources for all code.
+"call deoplete#custom#option('sources', {
+"\ '_': ['ale'],
+"\})
 " use tab for completion
 "inoremap <expr><tab> pumvisible() ? '\<c-n>' : '\<tab>'
 nnoremap <silent> <C-p> :FzfFiles<CR>
@@ -354,12 +354,12 @@ let g:airline_paste_symbol = '∥'
 let g:airline#extensions#tabline#enabled = 0
 let g:airline#extensions#branch#displayed_head_limit = 17
 " show errors or warnings in my statusline (ALE integration)
-let g:airline#extensions#ale#enabled = 1
-"let g:airline#extensions#coc#enabled = 0
-"let g:airline#exteneions#coc#error_symbol = 'Error:'
-"let g:airline#exteneions#coc#warning_symbol = 'Warning:'
-"let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
-"let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+"let g:airline#extensions#ale#enabled = 0
+let g:airline#extensions#coc#enabled = 1
+let g:airline#exteneions#coc#error_symbol = 'Error:'
+let g:airline#exteneions#coc#warning_symbol = 'Warning:'
+let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 " }}}
 
 " Fuzzy Finder{{{
@@ -414,7 +414,7 @@ nmap <silent> <leader>ta :TestSuite<CR> "Test All
 nmap <silent> <leader>tl :TestLast<CR>
 " }}}
 
-set background=dark
+set background=light
 set termguicolors
 
 " NeoSolarized {{{
