@@ -36,8 +36,8 @@ set cursorcolumn
 set title
 
 " Autoinstall vim-plug {{{
-if empty(glob('~/.nvim/autoload/plug.vim'))
-  silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall
 endif
@@ -45,8 +45,6 @@ endif
 
 call plug#begin('~/.local/share/nvim/plugged')
   Plug 'tpope/vim-sensible'
-  " asynchronous completation framework
-  "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   " Polyglot loads language support on demand!
   Plug 'sheerun/vim-polyglot'
   " Color theme
@@ -57,12 +55,10 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   " FZF
-  Plug '/usr/local/opt/fzf'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   " Elixir configuration
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  "Plug 'slashmili/alchemist.vim'
-  "Plug 'elixir-editors/vim-elixir'
   Plug 'elixir-lsp/elixir-ls', { 'do': { -> g:ElixirLS.compile() } }
   " wisely "end" in Elixir and other languages
   Plug 'tpope/vim-endwise'
@@ -84,10 +80,12 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'mzlogin/vim-markdown-toc'
   " Vim plugin for interacting with databases
   Plug 'tpope/vim-dadbod'
+  " TODO, HACK, FIXME,... comments
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'folke/todo-comments.nvim'
 call plug#end()
 
 " See: https://bernheisel.com/blog/vim-elixir-ls-plug/
-
 let g:coc_global_extensions = ['coc-elixir', 'coc-diagnostic']
 
 " ElixirLS {{{
@@ -414,7 +412,7 @@ nmap <silent> <leader>ta :TestSuite<CR> "Test All
 nmap <silent> <leader>tl :TestLast<CR>
 " }}}
 
-set background=light
+set background=dark
 set termguicolors
 
 " NeoSolarized {{{
@@ -472,3 +470,48 @@ endfun
 
 autocmd BufRead,BufNewFile *.md,*.txt,*.rst call HighlightBadWords()
 autocmd InsertLeave *.md,*.txt,*.rst call HighlightBadWords()
+
+" Gutentag 'halt on exit' issue
+" See: https://github.com/ludovicchabant/vim-gutentags/issues/178#issuecomment-575693926
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root  = ['package.json', '.git', '.hg', '.svn']
+let g:gutentags_cache_dir = expand('~/.gutentags_cache')
+let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+let g:gutentags_ctags_extra_args = ['--tag-relative=yes', '--fields=+ailmnS']
+let g:gutentags_ctags_exclude = [
+\  '*.git', '*.svn', '*.hg',
+\  'cache', 'build', 'dist', 'bin', 'node_modules', 'bower_components',
+\  '_build', 'deps', '*.elixir_ls',
+\  '*-lock.json',  '*.lock',
+\  '*.min.*',
+\  '*.bak',
+\  '*.zip',
+\  '*.pyc',
+\  '*.class',
+\  '*.sln',
+\  '*.csproj', '*.csproj.user',
+\  '*.tmp',
+\  '*.cache',
+\  '*.vscode',
+\  '*.pdb',
+\  '*.exe', '*.dll', '*.bin',
+\  '*.mp3', '*.ogg', '*.flac',
+\  '*.swp', '*.swo',
+\  '.DS_Store', '*.plist',
+\  '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png', '*.svg',
+\  '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+\  '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx', '*.xls',
+\]
+
+" See: https://github.com/folke/todo-comments.nvim
+lua << EOF
+  require("todo-comments").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+EOF

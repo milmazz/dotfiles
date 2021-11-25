@@ -26,12 +26,18 @@ set -gx FZF_DEFAULT_OPTS "
   --multi
   --inline-info
   --preview='bat --style=numbers --color=always {} 2> /dev/null | head -500'
-  --preview-window='right:wrap:hidden'
-  --bind='ctrl-s:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+  --preview-window='right:wrap:hidden'"
+  #--bind='ctrl-s:toggle-preview,ctrl-f:half-page-down,ctrl-b:half-page-up,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 ## Use git-ls-files inside git repo, otherwise fd
-set -gx FZF_DEFAULT_COMMAND "git ls-files --cached --others --exclude-standard | fd --type f --type l $FD_OPTIONS"
+#set -gx FZF_DEFAULT_COMMAND "git ls-files --cached --others --exclude-standard | fd --type f --type l $FD_OPTIONS"
+set -gx FZF_DEFAULT_COMMAND "rg --files"
 set -gx FZF_CTRL_T_COMMAND "fd $FD_OPTIONS"
 set -gx FZF_ALT_C_COMMAND "fd --type d $FD_OPTIONS"
+
+## Use Neovim as "preferred editor"
+set -gx VISUAL nvim
+set -gx VIMCONFIG ~/.config/nvim
+set -gx VIMDATA ~/.local/share/nvim
 
 ## bat, a cat clone
 ## See: https://github.com/sharkdp/bat
@@ -52,9 +58,9 @@ end
 function removepath
     if set -l index (contains -i $argv[1] $PATH)
         set --erase --universal fish_user_paths[$index]
-        echo "Updated PATH: $PATH"
-    else
-        echo "$argv[1] not found in PATH: $PATH"
+        #echo "Updated PATH: $PATH"
+        #else
+        #echo "$argv[1] not found in PATH: $PATH"
     end
 end
 
@@ -67,6 +73,11 @@ end
 # iTerm fish integration
 if test -e {$HOME}/.iterm2_shell_integration.fish
   source {$HOME}/.iterm2_shell_integration.fish
+end
+
+# hledger
+if test -e ~/finance/2020.journal
+  set -gx LEDGER_FILE ~/finance/2020.journal
 end
 
 # ssl
@@ -129,6 +140,18 @@ end
 
 function vim --wrap="nvim" --description "alias vim=nvim"
   nvim $argv
+end
+
+function ks
+  bass source /usr/local/bin/kube-switch $argv
+end
+
+function ksp
+  bass source /usr/local/bin/kube-switch prod
+end
+
+function kss
+  bass source /usr/local/bin/kube-switch staging
 end
 
 # starship init fish | source
