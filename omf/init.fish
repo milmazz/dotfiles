@@ -8,6 +8,9 @@ set --erase fish_greeting
 ## Erlang history
 set -g -x ERL_AFLAGS "-kernel shell_history enabled"
 
+## KERL options for Erlang
+set -g -x KERL_BUILD_DOCS yes
+
 ## Default editor: nvim
 if not set --query EDITOR
   set --universal --export EDITOR nvim
@@ -66,8 +69,8 @@ end
 
 # asdf - version manager
 # See: https://github.com/asdf-vm/asdf
-if test -d /usr/local/opt/asdf
-  source /usr/local/opt/asdf/asdf.fish
+if test -d /opt/homebrew/opt/asdf
+  source /opt/homebrew/opt/asdf/asdf.fish
 end
 
 # iTerm fish integration
@@ -75,26 +78,14 @@ if test -e {$HOME}/.iterm2_shell_integration.fish
   source {$HOME}/.iterm2_shell_integration.fish
 end
 
-# hledger
-if test -e ~/finance/2020.journal
-  set -gx LEDGER_FILE ~/finance/2020.journal
-end
-
 # ssl
-if test -d /usr/local/opt/openssl/bin
-  add_to_fish_user_paths /usr/local/opt/openssl/bin
-end
-
-add_to_fish_user_paths /usr/local/sbin
-
-# rust
-if test -e ~/.cargo/env
-  add_to_fish_user_paths ~/.cargo/bin
-end
+#if test -d /usr/local/opt/openssl/bin
+#  add_to_fish_user_paths /usr/local/opt/openssl/bin
+#end
 
 # Load virtualenv automatically
-status --is-interactive; and pyenv init - | source
-eval (python -m virtualfish)
+#status --is-interactive; and pyenv init - | source
+#eval (python -m virtualfish)
 
 ###########
 # Aliases #
@@ -140,18 +131,6 @@ end
 
 function vim --wrap="nvim" --description "alias vim=nvim"
   nvim $argv
-end
-
-function ks
-  bass source /usr/local/bin/kube-switch $argv
-end
-
-function ksp
-  bass source /usr/local/bin/kube-switch prod
-end
-
-function kss
-  bass source /usr/local/bin/kube-switch staging
 end
 
 # starship init fish | source
