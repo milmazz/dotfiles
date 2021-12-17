@@ -84,8 +84,9 @@ end
 #end
 
 # Load virtualenv automatically
-#status --is-interactive; and pyenv init - | source
-#eval (python -m virtualfish)
+status is-login; and pyenv init --path | source
+status is-interactive; and pyenv init - | source
+status is-interactive; and pyenv virtualenv-init - | source
 
 ###########
 # Aliases #
