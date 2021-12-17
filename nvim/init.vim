@@ -3,8 +3,8 @@ set nocompatible
 " turn off mouse
 set mouse=""
 
-let g:python_host_prog = '/Users/milmazz/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = '/Users/milmazz/.pyenv/versions/neovim3/bin/python'
+let g:python_host_prog = $HOME . '/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = $HOME . '/.pyenv/versions/neovim3/bin/python'
 
 " Sane tabs
 " - Two spaces wide
@@ -36,14 +36,15 @@ set cursorcolumn
 set title
 
 " Autoinstall vim-plug {{{
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/nvim/site/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 " }}}
 
-call plug#begin('~/.local/share/nvim/plugged')
+"call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-sensible'
   " Polyglot loads language support on demand!
   Plug 'sheerun/vim-polyglot'
@@ -93,13 +94,15 @@ let g:ElixirLS = {}
 let ElixirLS.path = stdpath('config').'/plugged/elixir-ls'
 let ElixirLS.lsp = ElixirLS.path.'/release/language_server.sh'
 let ElixirLS.cmd = join([
+        \ 'cp .release-tool-versions .tool-versions &&',
         \ 'asdf install &&',
         \ 'mix do',
         \ 'local.hex --force --if-missing,',
         \ 'local.rebar --force,',
         \ 'deps.get,',
         \ 'compile,',
-        \ 'elixir_ls.release'
+        \ 'elixir_ls.release &&',
+        \ 'rm .tool-versions'
         \ ], ' ')
 
 function ElixirLS.on_stdout(_job_id, data, _event)
@@ -395,7 +398,7 @@ let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'elixir': ['mix_format'],
 \}
-let g:ale_elixir_elixir_ls_release='/Users/milmazz/Dev/elixir-lang/elixir-ls/release'
+let g:ale_elixir_elixir_ls_release = ElixirLS.path.'/release'
 autocmd FileType elixir nnoremap <leader>] :ALEGoToDefinition<CR>
 "Move between linting errors
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
