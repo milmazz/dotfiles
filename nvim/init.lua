@@ -1,0 +1,364 @@
+require("plugins")
+
+local cmd = vim.cmd
+local opt = vim.opt
+local g = vim.g
+
+opt.backspace = {"indent", "eol", "start"}
+opt.cursorcolumn = true
+opt.cursorline = true
+opt.expandtab = true -- Use spaces instead of tabs
+opt.hidden = true -- Enable background buffers
+opt.hlsearch = true -- Highlight found searches
+opt.ignorecase = true -- Ignore case
+opt.incsearch = true -- Shows the match while typing
+opt.joinspaces = false -- No double spaces with join
+opt.linebreak = true -- Stop words being broken on wrap
+opt.list = false -- Show some invisible characters
+opt.mouse = ""
+opt.number = true -- Show line numbers
+opt.numberwidth = 5 -- Make the gutter wider by default
+opt.relativenumber = true -- Relative line numbers
+opt.shiftwidth = 2
+opt.smartcase = true
+opt.softtabstop = 2
+opt.tabstop = 2
+opt.title = true
+
+g.mapleader = ","
+
+-- providers
+g.python_host_prog = os.getenv("HOME") .. "/.pyenv/versions/neovim2/bin/python"
+g.python3_host_prog = os.getenv("HOME") .. "/.pyenv/versions/neovim3/bin/python"
+
+function map(mode, shortcut, command)
+  vim.api.nvim_set_keymap(mode, shortcut, command, {noremap = true, silent = true})
+end
+
+-- Configure Neovim to automatically run `:PackerCompile` whenever
+-- `plugins.lua` is updated with an autocommand:
+vim.cmd(
+  [[
+augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end
+]]
+)
+
+----------------
+-- Treesitter --
+----------------
+local treesitter = require("nvim-treesitter.configs")
+
+treesitter.setup {
+  -- Consistent syntax highlighting.
+  highlight = {
+    enable = true,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false
+  },
+  -- Incremental selection based on the named nodes from the grammar.
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm"
+    }
+  },
+  -- Indentation based on treesitter for the = operator. NOTE: This is an experimental feature.
+  indent = {
+    enable = true
+  }
+}
+
+--opt.foldmethod = "expr"
+--opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+-- Color Scheme with Tree-Sitter Support
+opt.termguicolors = true
+opt.background = "dark" -- or ligth
+-- Set contrast.
+-- This configuration option should be placed before `colorscheme everforest`.
+-- Available values: 'hard', 'medium'(default), 'soft'
+g.everforest_background = "soft"
+cmd([[colorscheme everforest]])
+
+---------------
+-- Telescope --
+---------------
+require("telescope").setup {
+  defaults = {
+    preview = {
+      -- NOTE: Disabling this for performance purposes for now
+      -- See: https://github.com/nvim-telescope/telescope.nvim/issues/1616#issuecomment-999123921
+      treesitter = false
+    }
+  },
+  extensions = {
+    fzf = {
+      fuzzy = true, -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true, -- override the file sorter
+      case_mode = "smart_case" -- or "ignore_case" or "respect_case"
+      -- the default case_mode is "smart_case"
+    }
+  }
+}
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension:
+require("telescope").load_extension("fzf")
+
+-------------
+-- lualine --
+-------------
+require("lualine").setup {
+  options = {
+    icons_enabled = true,
+    theme = "everforest",
+    component_separators = {left = "", right = ""},
+    section_separators = {left = "", right = ""},
+    disabled_filetypes = {},
+    always_divide_middle = true
+  },
+  sections = {
+    lualine_a = {"mode"},
+    lualine_b = {"branch", "diff", "diagnostics"},
+    lualine_c = {"filename"},
+    lualine_x = {"encoding", "fileformat", "filetype"},
+    lualine_y = {"progress"},
+    lualine_z = {"location"}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {"filename"},
+    lualine_x = {"location"},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  extensions = {}
+}
+
+---------------
+-- Formatter --
+---------------
+require("formatter").setup(
+  {
+    filetype = {
+      sh = {
+        -- Shell Script Formatter
+        function()
+          return {
+            exe = "shfmt",
+            args = {"-i", 2},
+            stdin = true
+          }
+        end
+      },
+      lua = {
+        -- luafmt
+        function()
+          return {
+            exe = "luafmt",
+            args = {"--indent-count", 2, "--stdin"},
+            stdin = true
+          }
+        end
+      },
+      elixir = {
+        -- mix
+        function()
+          return {
+            exe = "mix",
+            args = {"format"},
+            stdin = true
+          }
+        end
+      }
+    }
+  }
+)
+
+-- Format on save
+vim.api.nvim_exec(
+  [[
+augroup FormatAutogroup
+  autocmd!
+  autocmd BufWritePost *.js,*.rs,*.lua FormatWrite
+augroup END
+]],
+  true
+)
+
+-------------
+-- Aliases --
+-------------
+
+map("n", "<leader>f", [[:Format<CR>]]) -- Format
+map("n", "<leader>ff", [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
+map("n", "<leader>fg", [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
+map("n", "<leader>fb", [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
+map("n", "<leader>f?", [[<cmd>lua require('telescope.builtin').help_tags()<cr>]])
+map("n", "<leader>fh", [[<cmd>lua require('telescope.builtin').command_history()<cr>]])
+
+-----------------------
+-- LSP configuration --
+-----------------------
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...)
+    vim.api.nvim_buf_set_keymap(bufnr, ...)
+  end
+  local function buf_set_option(...)
+    vim.api.nvim_buf_set_option(bufnr, ...)
+  end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+
+  -- Mappings.
+  local opts = {noremap = true, silent = true}
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+  buf_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+  buf_set_keymap("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+  buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+  buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+  buf_set_keymap("n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+  buf_set_keymap("n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+  buf_set_keymap("n", "<space>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
+  buf_set_keymap("n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+  buf_set_keymap("n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  buf_set_keymap("n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+  buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+  buf_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+  buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+  buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+  buf_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+end
+
+local lspconfig = require("lspconfig")
+
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+-- local servers = {"clangd", "rust_analyzer", "pyright", "tsserver"}
+--for _, lsp in ipairs(servers) do
+--  lspconfig[lsp].setup {
+--    -- on_attach = my_custom_on_attach,
+--    capabilities = capabilities
+--  }
+--end
+local path_to_elixirls = vim.fn.expand("~/.cache/nvim/lspconfig/elixirls/elixir-ls/release/language_server.sh")
+
+require("lspconfig").elixirls.setup(
+  {
+    cmd = {path_to_elixirls},
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150
+    },
+    settings = {
+      elixirLS = {
+        dialyzerEnabled = true,
+        fetchDeps = true
+      }
+    }
+  }
+)
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = "menu,menuone,noselect"
+
+-------------------
+-- luasnip setup --
+-------------------
+local luasnip = require "luasnip"
+
+--------------------
+-- nvim-cmp setup --
+--------------------
+local cmp = require "cmp"
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end
+  },
+  mapping = {
+    ["<C-p>"] = cmp.mapping.select_prev_item(),
+    ["<C-n>"] = cmp.mapping.select_next_item(),
+    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<CR>"] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true
+    },
+    ["<Tab>"] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end,
+    ["<S-Tab>"] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end
+  },
+  sources = cmp.config.sources(
+    {
+      {name = "nvim_lsp"},
+      {name = "luasnip"}
+    },
+    {
+      {name = "buffer"}
+    }
+  )
+}
+
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(
+  "/",
+  {
+    sources = {
+      {name = "buffer"}
+    }
+  }
+)
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(
+  ":",
+  {
+    sources = cmp.config.sources(
+      {
+        {name = "path"}
+      },
+      {
+        {name = "cmdline"}
+      }
+    )
+  }
+)
