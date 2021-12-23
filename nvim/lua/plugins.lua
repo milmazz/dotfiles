@@ -46,8 +46,6 @@ return require("packer").startup(
       requires = {"kyazdani42/nvim-web-devicons", opt = true}
     }
 
-    use "mhartington/formatter.nvim"
-
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
     if packer_bootstrap then
