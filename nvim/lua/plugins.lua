@@ -19,6 +19,9 @@ return require("packer").startup(
     use "hrsh7th/cmp-cmdline"
     use "hrsh7th/nvim-cmp"
 
+    -- testing
+    use "vim-test/vim-test"
+
     -- For luasnip users
     use "saadparwaiz1/cmp_luasnip" -- Snippets source for nvim-cmp
     use "L3MON4D3/LuaSnip" -- Snippets plugin
