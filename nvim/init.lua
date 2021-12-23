@@ -182,7 +182,7 @@ lspconfig.efm.setup(
   {
     capabilities = capabilities,
     on_attach = on_attach,
-    filetypes = {"elixir"}
+    filetypes = {"elixir", "sh"}
   }
 )
 
