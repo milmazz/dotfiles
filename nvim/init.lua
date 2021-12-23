@@ -49,7 +49,7 @@ augroup end
 ----------------
 -- Treesitter --
 ----------------
-require("treesitter")
+require("me.treesitter")
 
 -- Color Scheme with Tree-Sitter Support
 opt.termguicolors = true
@@ -88,74 +88,12 @@ require("telescope").load_extension("fzf")
 -------------
 -- lualine --
 -------------
-require("lualine").setup {
-  options = {
-    icons_enabled = true,
-    theme = "everforest",
-    component_separators = {left = "", right = ""},
-    section_separators = {left = "", right = ""},
-    disabled_filetypes = {},
-    always_divide_middle = true
-  },
-  sections = {
-    lualine_a = {"mode"},
-    lualine_b = {"branch", "diff", "diagnostics"},
-    lualine_c = {"filename"},
-    lualine_x = {"encoding", "fileformat", "filetype"},
-    lualine_y = {"progress"},
-    lualine_z = {"location"}
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {"filename"},
-    lualine_x = {"location"},
-    lualine_y = {},
-    lualine_z = {}
-  },
-  tabline = {},
-  extensions = {}
-}
+require("me.lualine")
 
 ---------------
 -- Formatter --
 ---------------
-require("formatter").setup(
-  {
-    filetype = {
-      sh = {
-        -- Shell Script Formatter
-        function()
-          return {
-            exe = "shfmt",
-            args = {"-i", 2},
-            stdin = true
-          }
-        end
-      },
-      lua = {
-        -- luafmt
-        function()
-          return {
-            exe = "luafmt",
-            args = {"--indent-count", 2, "--stdin"},
-            stdin = true
-          }
-        end
-      },
-      elixir = {
-        -- mix
-        function()
-          return {
-            exe = "mix",
-            args = {"format", "-"},
-            stdin = true
-          }
-        end
-      }
-    }
-  }
-)
+require("me.formatter")
 
 -- Format on save
 vim.api.nvim_exec(
