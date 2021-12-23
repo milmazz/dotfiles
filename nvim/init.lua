@@ -161,7 +161,7 @@ local lspconfig = require("lspconfig")
 --end
 local path_to_elixirls = vim.fn.expand("~/.cache/nvim/lspconfig/elixirls/elixir-ls/release/language_server.sh")
 
-require("lspconfig").elixirls.setup(
+lspconfig.elixirls.setup(
   {
     cmd = {path_to_elixirls},
     capabilities = capabilities,
@@ -175,6 +175,14 @@ require("lspconfig").elixirls.setup(
         fetchDeps = true
       }
     }
+  }
+)
+
+lspconfig.efm.setup(
+  {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    filetypes = {"elixir"}
   }
 )
 
