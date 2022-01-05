@@ -100,6 +100,8 @@ map("n", "<leader>ta", [[:TestSuite<CR>]]) -- test all
 map("n", "<leader>tl", [[:TestLast<CR>]])
 map("n", "<leader>tv", [[:TestVisit<CR>]])
 
+map("n", "<leader>ot", [[:vsplit term://fish<cr>]])
+
 -----------------------
 -- LSP configuration --
 -----------------------
@@ -221,7 +223,7 @@ local cmp = require "cmp"
 cmp.setup {
   snippet = {
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end
   },
   mapping = {
