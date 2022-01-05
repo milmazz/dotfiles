@@ -70,12 +70,18 @@ require("me.telescope")
 -------------
 require("me.lualine")
 
+---------------
+-- Formatter --
+---------------
+require("me.formatter")
+
 -- Format on save
 vim.cmd(
   [[
 augroup FormatAutogroup
   autocmd!
-  autocmd BufWritePost *.ex,*.exs,*.js,*.rs,*.lua lua vim.lsp.buf.formatting()
+  autocmd BufWritePost *.js,*.rs,*.lua lua vim.lsp.buf.formatting()
+  autocmd BufWritePost *.ex,*.exs FormatWrite
 augroup END
 ]]
 )
@@ -85,6 +91,7 @@ augroup END
 -------------
 
 --map("n", "<leader>ff", [[<cmd>lua require('telescope.builtin').git_files()<cr>]])
+map("n", "<leader>,", [[:Format<CR>]]) -- Format
 map("n", "<leader>ff", [[<cmd>lua require('telescope.builtin').find_files()<cr>]])
 map("n", "<leader>fg", [[<cmd>lua require('telescope.builtin').live_grep()<cr>]])
 map("n", "<leader>fb", [[<cmd>lua require('telescope.builtin').buffers()<cr>]])
@@ -141,7 +148,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
   buf_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
   buf_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-  buf_set_keymap("n", "<leader>,", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
 
 local lspconfig = require("lspconfig")
