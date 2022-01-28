@@ -10,6 +10,7 @@ set -g -x ERL_AFLAGS "-kernel shell_history enabled"
 
 ## KERL options for Erlang
 set -g -x KERL_BUILD_DOCS yes
+set -g -x KERL_CONFIGURE_OPTIONS "--disable-debug --without-javac --with-ssl=/opt/homebrew/opt/openssl@1.1"
 
 ## Default editor: nvim
 if not set --query EDITOR
