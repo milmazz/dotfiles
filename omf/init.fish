@@ -118,9 +118,9 @@ function gd --wrap="git diff" --description "alias gd=git diff"
   git diff $argv
 end
 
-function go --wrap="git checkout" --description "alias go=git checkout"
-  git checkout $argv
-end
+#function go --wrap="git checkout" --description "alias go=git checkout"
+#  git checkout $argv
+#end
 
 function grm --wrap="git rm" --description "alias grm=git rm"
   git rm $argv
@@ -132,6 +132,18 @@ end
 
 function vim --wrap="nvim" --description "alias vim=nvim"
   nvim $argv
+end
+
+function kgrep --wrap="kubectl" --description "get pods"
+  kubectl get pods -n backend | grep $argv | cut -f 1 -d " "
+end
+
+function kexec --wrap="kubectl" --description "kubectl exec"
+  kubectl exec -i -t -n backend $argv -- /bin/bash
+end
+
+function to_rtf --wrap="pygmentize" --description "export to RTF"
+  pygmentize -f rtf -O "style=friendly,fontface=Cascadia Code" "$argv" | pbcopy
 end
 
 # starship init fish | source
