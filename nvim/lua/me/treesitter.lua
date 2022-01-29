@@ -23,6 +23,18 @@ treesitter.setup {
   -- Indentation based on treesitter for the = operator. NOTE: This is an experimental feature.
   indent = {
     enable = true
+  },
+  ensure_installed = {
+    "bash",
+    "dockerfile",
+    "eex",
+    "elixir",
+    "erlang",
+    "fish",
+    "html",
+    "json",
+    "lua",
+    "yaml"
   }
 }
 

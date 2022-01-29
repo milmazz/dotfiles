@@ -3,7 +3,8 @@ require("telescope").setup {
     preview = {
       -- NOTE: Disabling this for performance purposes for now
       -- See: https://github.com/nvim-telescope/telescope.nvim/issues/1616#issuecomment-999123921
-      treesitter = false
+      -- Apparently was fixed, let's see.
+      treesitter = true
     }
   },
   extensions = {
