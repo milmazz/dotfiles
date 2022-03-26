@@ -310,3 +310,17 @@ cmp.setup.cmdline(
     )
   }
 )
+
+-- Customizing how diagnostics are displayed
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = true,
+  severity_sort = false,
+})
+
+vim.o.updatetime = 150
+-- Show line diagnostics automatically in hover window
+-- for diagnostics for specific cursor position
+vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
