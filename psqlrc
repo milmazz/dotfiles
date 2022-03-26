@@ -1,10 +1,22 @@
+-- Some references
+-- https://www.digitalocean.com/community/tutorials/how-to-customize-the-postgresql-prompt-with-psqlrc-on-ubuntu-14-04
+-- https://thoughtbot.com/blog/an-explained-psqlrc
+-- https://theartofpostgresql.com
+
+-- Don't display the "helpful" message on startup.
 \set QUIET 1
-\set PROMPT1 '%/%#%x '
-\set HISTFILE ~/.psql/.psql_history-:DBNAME
+
+\set PROMPT1 '%M:%> %n@%/%R%#%x '
+\set HISTFILE ~/.psql/history-:DBNAME
+\set HISTSIZE 2000
 
 \x auto
 \set ON_ERROR_STOP on
 \set ON_ERROR_ROLLBACK interactive
+\set COMP_KEYWORD_CASE upper
+
+-- Show how long each query takes to execute
+\timing
 
 \pset null '¤'
 \pset linestyle 'unicode'
