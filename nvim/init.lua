@@ -110,8 +110,7 @@ map("n", "<leader>tv", [[:TestVisit<CR>]])
 map("n", "<leader>ot", [[:vsplit term://fish<cr>]])
 
 -- To map <Esc> to exit terminal-mode:
--- :tnoremap <Esc> <C-\><C-n>
-
+map("t", "<Esc>", [[<C-\><C-n>]])
 -----------------------
 -- LSP configuration --
 -----------------------
