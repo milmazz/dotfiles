@@ -27,3 +27,6 @@ tags.lock
 
 # direnv
 .direnv/
+
+# Claude Code machine-local settings (consolidated from ~/.config/git/ignore)
+**/.claude/settings.local.json
