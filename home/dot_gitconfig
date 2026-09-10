@@ -1,0 +1,57 @@
+[user]
+	name = Milton Mazzarri
+	email = me@milmazz.uno
+	signingKey = /Users/milmazz/.ssh/id_ed25519.pub
+[alias]
+	count-lines = "! git log --author=\"$1\" --after=\"$2T23:59:59\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+[gpg]
+	format = ssh
+[column]
+  ui = auto
+[branch]
+  sort = -committerdate
+[tag]
+  sort = version:refname
+[init]
+	defaultBranch = main
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+[push]
+  default = simple
+  autoSetupRemote = true
+  followTags = true
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+[help]
+  autocorrect = prompt
+[commit]
+  verbose = true
+	gpgsign = true
+[rerere]
+  enabled = true
+  autoupdate = true
+[core]
+  excludesfile = ~/.gitignore
+  pager = delta
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
+[merge]
+	conflictstyle = zdiff3
+[pull]
+	rebase = true
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+# Machine-local extras (work identity, conditional includes). Gitignored.
+[include]
+  path = ~/.gitconfig-local
+
