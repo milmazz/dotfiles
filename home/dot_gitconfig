@@ -38,6 +38,8 @@
 [core]
   excludesfile = ~/.gitignore
   pager = delta
+  fsmonitor = true
+  untrackedCache = true
 [rebase]
   autoSquash = true
   autoStash = true
