@@ -1,0 +1,25 @@
+# Ghostty configuration -- https://ghostty.org/docs/config
+# See all options + defaults: `ghostty +show-config --default --docs`
+
+# Font. FiraCode Nerd Font Mono carries the powerline/editor glyphs; Ghostty
+# also has built-in Nerd Font symbol fallback if it's ever missing.
+font-family = FiraCode Nerd Font Mono
+font-size = 14
+
+# Theme -- matches Neovim's tokyonight. Try `ghostty +list-themes` for others.
+theme = TokyoNight Moon
+
+# Window
+window-padding-x = 10
+window-padding-y = 8
+macos-titlebar-style = tabs
+macos-option-as-alt = true
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Behavior
+copy-on-select = clipboard
+confirm-close-surface = false
