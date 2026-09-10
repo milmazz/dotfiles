@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install fish and shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fish shellcheck
+
+      - name: Fish syntax
+        run: |
+          status=0
+          for f in $(git ls-files '*.fish'); do
+            fish -n "$f" || { echo "::error file=$f::fish syntax error"; status=1; }
+          done
+          exit $status
+
+      - name: ShellCheck chezmoi run scripts
+        run: |
+          for f in $(git ls-files '*run_*.sh.tmpl'); do
+            # Strip chezmoi template directives ({{ ... }}) before linting.
+            out="/tmp/$(basename "$f" .tmpl)"
+            sed '/{{.*}}/d' "$f" > "$out"
+            shellcheck "$out"
+          done
+
+      - name: Install chezmoi
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+
+      - name: chezmoi apply dry-run (validates templates render)
+        run: |
+          dest="$(mktemp -d)"
+          "$HOME/.local/bin/chezmoi" --source="$PWD" --destination="$dest" \
+            apply --dry-run --no-tty --exclude=scripts
+
+  privacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history for the secret scan
+
+      - name: No internal identifiers in tracked files
+        run: |
+          # Exclude this workflow, which necessarily names the patterns.
+          if git grep -nEi 'frameio|massdriver' -- . ':(exclude).github/workflows/ci.yml'; then
+            echo "::error::internal identifier found in a tracked file"
+            exit 1
+          fi
+
+      - name: Work/local files must stay untracked
+        run: |
+          status=0
+          for f in home/dot_Brewfile.local home/dot_gitconfig-adobe home/dot_gitconfig-local; do
+            if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+              echo "::error::$f is tracked but must remain local-only"
+              status=1
+            fi
+          done
+          exit $status
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
