@@ -1,2 +1,8 @@
 # Work / internal packages -- deployed by chezmoi locally, never committed.
 home/dot_Brewfile.local
+
+# Machine-local / work git config -- deployed by chezmoi locally, never
+# committed. dot_gitconfig-local wires up the conditional Adobe include;
+# dot_gitconfig-adobe holds the work email + internal URL rewrites.
+home/dot_gitconfig-local
+home/dot_gitconfig-adobe

@@ -1,0 +1,29 @@
+# Global gitignore -- referenced by ~/.gitconfig (core.excludesfile).
+# Machine/editor noise that should never be committed to any repo.
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+
+# Vim / Neovim
+*~
+*.swp
+*.swo
+.*.sw?
+Session.vim
+.netrwhist
+
+# ctags
+tags
+tags.lock
+
+# direnv
+.direnv/
