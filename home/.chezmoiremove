@@ -1,0 +1,8 @@
+# Files chezmoi deletes from the target on `apply`.
+
+# Leftover Oh My Fish loader -- superseded by the plain-fish config.
+.config/fish/conf.d/omf.fish
+
+# fish's auto-generated theme file -- superseded by the managed conf.d/theme.fish
+# (identical colors). Removing it avoids two files setting the same variables.
+.config/fish/conf.d/fish_frozen_theme.fish

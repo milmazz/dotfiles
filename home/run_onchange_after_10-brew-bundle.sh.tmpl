@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Installs everything in the Brewfile. chezmoi re-runs this script only when a
+# Brewfile changes -- the hashes below tie the two together:
+# Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
+{{- if stat (joinPath .chezmoi.sourceDir "dot_Brewfile.local") }}
+# Brewfile.local hash: {{ include "dot_Brewfile.local" | sha256sum }}
+{{- end }}
+set -euo pipefail
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew not found -- install it from https://brew.sh, then run 'chezmoi apply'." >&2
+  exit 0
+fi
+
+echo "==> brew bundle --global (from ~/.Brewfile)"
+brew bundle --global
+
+if [ -f "$HOME/.Brewfile.local" ]; then
+  echo "==> brew bundle (work/internal, from ~/.Brewfile.local)"
+  brew bundle --file="$HOME/.Brewfile.local"
+fi
