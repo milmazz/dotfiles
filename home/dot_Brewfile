@@ -1,0 +1,76 @@
+# Homebrew Bundle -- run `brew bundle --global` to install (reads ~/.Brewfile).
+#
+# This file reflects what is actually installed. Work/internal packages live in
+# ~/.Brewfile.local (gitignored, not synced). Taps are omitted: homebrew/core,
+# homebrew/cask, homebrew/bundle and homebrew/services are built into Homebrew.
+
+# Shell & prompt
+brew "fish"
+brew "fisher"
+brew "bash"
+
+# Runtime / version manager (replaces asdf, pyenv, kerl)
+brew "mise"
+
+# Languages & runtimes
+brew "go"
+
+# Editor
+brew "neovim"
+
+# Git
+brew "git"
+brew "gh"
+brew "git-delta"
+brew "lazygit"
+
+# Search / files / shell utils
+brew "bat"
+brew "fd"
+brew "fzf"
+brew "ripgrep"
+brew "tree"
+brew "sponge"
+brew "gnu-sed"
+brew "jq"
+brew "yq"
+brew "htop"
+brew "ctags"
+brew "curl"
+brew "wget"
+
+# Task runners / dev workflow
+brew "just"
+brew "uv"
+brew "chezmoi"
+brew "caddy"
+
+# Linters / formatters
+brew "shellcheck"
+brew "yamllint"
+brew "markdownlint-cli"
+brew "actionlint"
+brew "typos-cli"
+brew "ast-grep"
+
+# Kubernetes / cloud
+brew "k9s"
+brew "awscli"
+
+# Databases
+brew "postgresql@18", restart_service: :changed, link: true
+brew "libpq"
+brew "duckdb"
+brew "memcached", restart_service: :changed
+
+# GnuPG
+brew "gnupg"
+
+# Docs / rendering / misc
+brew "graphviz"
+brew "poppler"
+brew "wxwidgets"
+brew "epubcheck"
+
+# Casks
+cask "ghostty"

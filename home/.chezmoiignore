@@ -1,0 +1,3 @@
+# Personal nvim cheatsheets -- kept out of the repo, not managed by chezmoi.
+.config/nvim/cheatsheet.html
+.config/nvim/CHEATSHEET.md

@@ -29,6 +29,7 @@ set intervalstyle to 'postgres_verbose';
 
 \setenv LESS '-iMFXSx4R'
 
-\set env EDITOR 'vim'
+-- Editor invoked by \e and \ef
+\setenv PSQL_EDITOR 'nvim'
 
 \unset QUIET
