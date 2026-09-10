@@ -54,7 +54,8 @@ jobs:
 
       - name: No internal identifiers in tracked files
         run: |
-          if git grep -nEi 'frameio|massdriver' -- .; then
+          # Exclude this workflow, which necessarily names the patterns.
+          if git grep -nEi 'frameio|massdriver' -- . ':(exclude).github/workflows/ci.yml'; then
             echo "::error::internal identifier found in a tracked file"
             exit 1
           fi
