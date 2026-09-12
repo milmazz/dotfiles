@@ -10,7 +10,7 @@ milmazz's dotfiles, managed with [chezmoi](https://www.chezmoi.io).
 | `home/dot_config/nvim/`  | `~/.config/nvim/`  | Neovim (LazyVim) |
 | `home/dot_config/bat/`   | `~/.config/bat/`   | `bat` config |
 | `home/dot_psqlrc.tmpl`   | `~/.psqlrc`        | psql config (template) |
-| `home/dot_Brewfile`      | `~/.Brewfile`      | Homebrew bundle |
+| `home/dot_Brewfile.tmpl` | `~/.Brewfile`      | Homebrew bundle (template) |
 
 The repo uses a [`.chezmoiroot`](https://www.chezmoi.io/reference/special-files/chezmoiroot/)
 of `home/`, so everything chezmoi manages lives under `home/` and repo-root files
@@ -26,6 +26,11 @@ Install [Homebrew](https://brew.sh) first, then:
 brew install chezmoi
 chezmoi init --apply git@github.com:milmazz/dotfiles.git
 ```
+
+`chezmoi init` asks once whether this is a **work** or **personal** machine and
+stores the answer as `machine` in `~/.config/chezmoi/chezmoi.toml`. Templates
+use it to render machine-specific bits (currently the personal-only block at the
+bottom of the Brewfile). To change the answer later, run `chezmoi init` again.
 
 `chezmoi apply` writes `~/.Brewfile` and then runs `brew bundle --global`
 automatically (see `home/run_onchange_after_10-brew-bundle.sh.tmpl`), installing

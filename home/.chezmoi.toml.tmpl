@@ -1,0 +1,10 @@
+{{- /* Rendered by `chezmoi init` into ~/.config/chezmoi/chezmoi.toml.
+       Asked once; re-run `chezmoi init` to change the answer. */ -}}
+{{- $machine := promptChoiceOnce . "machine" "Is this a work or personal machine" (list "work" "personal") "work" -}}
+# Remember where the source repo lives, so `chezmoi init --source <dir>` sticks
+# and later commands (diff, apply, cd) need no --source flag. The git working
+# tree is stored (not the .chezmoiroot subdir) so `chezmoi cd` lands at the root.
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+[data]
+    machine = {{ $machine | quote }}
