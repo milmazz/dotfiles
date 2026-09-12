@@ -9,7 +9,7 @@ milmazz's dotfiles, managed with [chezmoi](https://www.chezmoi.io).
 | `home/dot_config/fish/` | `~/.config/fish/` | fish shell config, functions, abbreviations |
 | `home/dot_config/nvim/`  | `~/.config/nvim/`  | Neovim (LazyVim) |
 | `home/dot_config/bat/`   | `~/.config/bat/`   | `bat` config |
-| `home/dot_psqlrc`        | `~/.psqlrc`        | psql config |
+| `home/dot_psqlrc.tmpl`   | `~/.psqlrc`        | psql config (template) |
 | `home/dot_Brewfile`      | `~/.Brewfile`      | Homebrew bundle |
 
 The repo uses a [`.chezmoiroot`](https://www.chezmoi.io/reference/special-files/chezmoiroot/)

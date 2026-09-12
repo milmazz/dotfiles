@@ -1,11 +1,19 @@
+{{- /* Sign commits with SSH only on machines that have the key; elsewhere
+     signing stays off (add a signingKey in ~/.gitconfig-local if wanted). */ -}}
+{{- $sshKey := joinPath .chezmoi.homeDir ".ssh/id_ed25519.pub" -}}
+{{- $sign := stat $sshKey -}}
 [user]
 	name = Milton Mazzarri
 	email = me@milmazz.uno
-	signingKey = /Users/milmazz/.ssh/id_ed25519.pub
+{{- if $sign }}
+	signingKey = {{ $sshKey }}
+{{- end }}
 [alias]
 	count-lines = "! git log --author=\"$1\" --after=\"$2T23:59:59\" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf \"added lines: %s, removed lines: %s, total lines: %s\\n\", add, subs, loc }' #"
+{{- if $sign }}
 [gpg]
 	format = ssh
+{{- end }}
 [column]
   ui = auto
 [branch]
@@ -31,7 +39,9 @@
   autocorrect = prompt
 [commit]
   verbose = true
+{{- if $sign }}
 	gpgsign = true
+{{- end }}
 [rerere]
   enabled = true
   autoupdate = true
