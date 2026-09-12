@@ -1,6 +1,9 @@
-{{- /* Sign commits with SSH only on machines that have the key; elsewhere
-     signing stays off (add a signingKey in ~/.gitconfig-local if wanted). */ -}}
-{{- $sshKey := joinPath .chezmoi.homeDir ".ssh/id_ed25519.pub" -}}
+{{- /* Sign commits with SSH when the configured public key exists. The path
+     comes from the `sshSigningKey` data value (asked by `chezmoi init`);
+     without one, or if the file is missing, signing stays off. */ -}}
+{{- $sshKey := "~/.ssh/id_ed25519.pub" -}}
+{{- if hasKey . "sshSigningKey" }}{{ $sshKey = .sshSigningKey }}{{ end -}}
+{{- if hasPrefix "~/" $sshKey }}{{ $sshKey = joinPath .chezmoi.homeDir (trimPrefix "~/" $sshKey) }}{{ end -}}
 {{- $sign := stat $sshKey -}}
 [user]
 	name = Milton Mazzarri

@@ -27,10 +27,16 @@ brew install chezmoi
 chezmoi init --apply git@github.com:milmazz/dotfiles.git
 ```
 
-`chezmoi init` asks once whether this is a **work** or **personal** machine and
-stores the answer as `machine` in `~/.config/chezmoi/chezmoi.toml`. Templates
-use it to render machine-specific bits (currently the personal-only block at the
-bottom of the Brewfile). To change the answer later, run `chezmoi init` again.
+`chezmoi init` asks two questions once and stores the answers in
+`~/.config/chezmoi/chezmoi.toml`:
+
+- `machine`: **work** or **personal**. Selects the personal-only block at the
+  bottom of the Brewfile.
+- `sshSigningKey`: path to the SSH public key for signing git commits
+  (default `~/.ssh/id_ed25519.pub`). Signing is enabled only if that file
+  exists; register the same key on GitHub as a *signing* key.
+
+To change an answer later, run `chezmoi init` again.
 
 `chezmoi apply` writes `~/.Brewfile` and then runs `brew bundle --global`
 automatically (see `home/run_onchange_after_10-brew-bundle.sh.tmpl`), installing

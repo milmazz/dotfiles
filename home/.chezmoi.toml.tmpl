@@ -1,6 +1,7 @@
 {{- /* Rendered by `chezmoi init` into ~/.config/chezmoi/chezmoi.toml.
        Asked once; re-run `chezmoi init` to change the answer. */ -}}
 {{- $machine := promptChoiceOnce . "machine" "Is this a work or personal machine" (list "work" "personal") "work" -}}
+{{- $sshSigningKey := promptStringOnce . "sshSigningKey" "SSH public key used to sign git commits (signing is skipped if the file is missing)" "~/.ssh/id_ed25519.pub" -}}
 # Remember where the source repo lives, so `chezmoi init --source <dir>` sticks
 # and later commands (diff, apply, cd) need no --source flag. The git working
 # tree is stored (not the .chezmoiroot subdir) so `chezmoi cd` lands at the root.
@@ -8,3 +9,4 @@ sourceDir = {{ .chezmoi.workingTree | quote }}
 
 [data]
     machine = {{ $machine | quote }}
+    sshSigningKey = {{ $sshSigningKey | quote }}
