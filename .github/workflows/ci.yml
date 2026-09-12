@@ -63,7 +63,7 @@ jobs:
       - name: Work/local files must stay untracked
         run: |
           status=0
-          for f in home/dot_Brewfile.local home/dot_gitconfig-adobe home/dot_gitconfig-local; do
+          for f in home/dot_Brewfile.local home/dot_gitconfig-adobe home/dot_gitconfig-local home/private_dot_ssh/private_config.local; do
             if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
               echo "::error::$f is tracked but must remain local-only"
               status=1

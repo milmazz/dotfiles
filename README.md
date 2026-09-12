@@ -10,6 +10,8 @@ milmazz's dotfiles, managed with [chezmoi](https://www.chezmoi.io).
 | `home/dot_config/nvim/`  | `~/.config/nvim/`  | Neovim (LazyVim) |
 | `home/dot_config/bat/`   | `~/.config/bat/`   | `bat` config |
 | `home/dot_psqlrc.tmpl`   | `~/.psqlrc`        | psql config (template) |
+| `home/dot_gitconfig.tmpl` | `~/.gitconfig`    | git config (template; machine extras in `~/.gitconfig-local`) |
+| `home/private_dot_ssh/`  | `~/.ssh/config`    | ssh client config (template; hosts in `~/.ssh/config.local`, keys never managed) |
 | `home/dot_Brewfile.tmpl` | `~/.Brewfile`      | Homebrew bundle (template) |
 
 The repo uses a [`.chezmoiroot`](https://www.chezmoi.io/reference/special-files/chezmoiroot/)
