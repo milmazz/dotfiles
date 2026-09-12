@@ -52,10 +52,15 @@ chezmoi cd                                # drop into the source repo
 
 ## Notes
 
+- Prompt is [starship](https://starship.rs), directory jumping is
+  [zoxide](https://github.com/ajeetdsouza/zoxide) (`z`, `zi`) and history is
+  [atuin](https://atuin.sh) (Ctrl-R). All three come from the Brewfile and are
+  initialized in `config.fish`. atuin is local-only until you opt in to sync
+  (`atuin register` / `atuin login`); import old history with `atuin import auto`.
 - fish plugins are declared in `fish_plugins` and managed with
-  [fisher](https://github.com/jorgebucaran/fisher): `jethrokuan/z`
-  (directory jumping) and `oh-my-fish/theme-bobthefish` (prompt). On a fresh
-  machine, install fisher and run `fisher update` to restore them:
+  [fisher](https://github.com/jorgebucaran/fisher). On a fresh machine, install
+  fisher and run `fisher update` to sync with that list (it also removes plugins
+  no longer listed):
 
   ```fish
   curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
