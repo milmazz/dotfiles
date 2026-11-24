@@ -1,7 +1,6 @@
 # ~/.config/fish/config.fish
 
-# Disable the welcome text. bobthefish ships a fish_greeting function that
-# prints uname/uptime and ignores $fish_greeting, so shadow it with a no-op.
+# Disable the welcome text.
 function fish_greeting
 end
 
@@ -54,6 +53,13 @@ command -q mise; and mise activate fish | source
 ## fzf key bindings & completion (fzf >= 0.48)
 command -q fzf; and fzf --fish | source
 
+## zoxide -- smarter cd. `z <dir>` jumps by frecency, `zi` picks with fzf.
+command -q zoxide; and zoxide init fish | source
+
+## atuin -- searchable shell history on Ctrl-R. Up arrow stays fish's own
+## history; drop the flag to let atuin take it over too.
+command -q atuin; and atuin init fish --disable-up-arrow | source
+
 ###########
 # Aliases #
 ###########
@@ -69,3 +75,9 @@ abbr -a gs git status
 abbr -a gp git pull
 
 abbr -a vim nvim
+
+##########
+# Prompt #
+##########
+## starship -- keep last so nothing else overrides fish_prompt.
+command -q starship; and starship init fish | source

@@ -33,3 +33,10 @@ set intervalstyle to 'postgres_verbose';
 \setenv PSQL_EDITOR 'nvim'
 
 \unset QUIET
+{{- $dba := joinPath .chezmoi.homeDir "Dev/pg/postgres_dba/start.psql" }}
+{{- if stat $dba }}
+
+-- postgres_dba (https://github.com/NikolayS/postgres_dba): type :dba in psql.
+-- Only rendered on machines where the checkout exists.
+\set dba '\\i {{ $dba }}'
+{{- end }}

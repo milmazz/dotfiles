@@ -1,0 +1,16 @@
+{{- /* ~/.ssh/config. Only the config is managed -- never keys. The identity is
+     derived from the `sshSigningKey` answer given to `chezmoi init` (public key
+     path minus .pub), so one prompt drives both git signing and ssh auth. */ -}}
+{{- $key := "~/.ssh/id_ed25519.pub" -}}
+{{- if hasKey . "sshSigningKey" }}{{ $key = .sshSigningKey }}{{ end -}}
+{{- $identity := trimSuffix ".pub" $key -}}
+# Machine-local hosts (work bastions, internal remotes) live in config.local,
+# which is not managed by chezmoi. ssh silently skips it if it doesn't exist.
+Include ~/.ssh/config.local
+
+Host *
+  AddKeysToAgent yes
+{{- if eq .chezmoi.os "darwin" }}
+  UseKeychain yes
+{{- end }}
+  IdentityFile {{ $identity }}

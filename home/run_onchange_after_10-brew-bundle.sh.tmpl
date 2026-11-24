@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs everything in the Brewfile. chezmoi re-runs this script only when a
 # Brewfile changes -- the hashes below tie the two together:
-# Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
+# Brewfile hash: {{ includeTemplate "dot_Brewfile.tmpl" . | sha256sum }}
 {{- if stat (joinPath .chezmoi.sourceDir "dot_Brewfile.local") }}
 # Brewfile.local hash: {{ include "dot_Brewfile.local" | sha256sum }}
 {{- end }}

@@ -30,3 +30,11 @@ tags.lock
 
 # Claude Code machine-local settings (consolidated from ~/.config/git/ignore)
 **/.claude/settings.local.json
+
+# Elixir
+/.elixir_ls
+/cover
+
+# VS Code
+/.vscode
+*.code-workspace
