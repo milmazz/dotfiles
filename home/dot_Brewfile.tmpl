@@ -73,10 +73,11 @@ brew "k9s"
 brew "awscli"
 
 # Databases
-brew "postgresql@18", restart_service: :changed, link: true
+# Not run as a background service. Start on demand with
+# `brew services run postgresql@18`, stop with `brew services stop postgresql@18`.
+brew "postgresql@18", link: true
 brew "libpq"
 brew "duckdb"
-brew "memcached", restart_service: :changed
 
 # GnuPG
 brew "gnupg"
@@ -90,6 +91,7 @@ brew "epubcheck"
 
 # Casks
 cask "ghostty"
+cask "font-fira-code-nerd-font" # the font ~/.config/ghostty/config asks for
 
 {{- if $personal }}
 
@@ -108,9 +110,6 @@ brew "postgis" # bier (open-source library) development; depends on libpq only
 
 # JavaScript
 brew "yarn"
-
-# LLMs
-brew "ollama"
 
 # Duplicate-file finders
 brew "czkawka"
